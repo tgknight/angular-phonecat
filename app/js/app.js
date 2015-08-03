@@ -3,7 +3,8 @@
 /* App Module */
 angular.module('phonecatApp', [
     'ngRoute',
-    'phonecatControllers'
+    'phonecatControllers',
+    'phonecatFilters'
 ])
 .config(['$routeProvider', function($routeProvider) {
     $routeProvider
