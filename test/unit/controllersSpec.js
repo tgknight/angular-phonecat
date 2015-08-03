@@ -11,7 +11,7 @@ describe('PhoneCat controllers', function() {
         beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
             $httpBackend = _$httpBackend_;
             $httpBackend.expectGET('phones/phones.json')
-                .respond([{name: 'Nexus S'}, {name: 'Motorola DROID'}]);
+                .respond([{name: "Nexus S"}, {name: "Motorola DRIOD"}]); // trained response for unit test
             $scope = $rootScope.$new();
             $controller('PhoneListCtrl', {"$scope": $scope});
         }));
@@ -32,7 +32,27 @@ describe('PhoneCat controllers', function() {
             $httpBackend.flush();
 
             // expect to equal trained response
-            expect($scope.phones).toEqual([{name: 'Nexus S'}, {name: 'Motorola DROID'}]);
+            expect($scope.phones).toEqual([{name: "Nexus S"}, {name: "Motorola DRIOD"}]);
+        });
+    });
+
+    describe('PhoneDetailCtrl', function() {
+        var $scope, $httpBackend;
+
+        beforeEach(inject(function(_$httpBackend_, $rootScope, $routeParams, $controller) {
+            $httpBackend = _$httpBackend_;
+            $httpBackend.expectGET('phones/xyz.json')
+                .respond({name: "phone xyz"});
+            $routeParams.phoneId = 'xyz';
+            $scope = $rootScope.$new();
+            $controller('PhoneDetailCtrl', {"$scope": $scope});
+        }));
+
+        it('should fetch phone xyz detail', function() {
+            expect($scope.phone).toBeUndefined();
+            $httpBackend.flush();
+
+            expect($scope.phone).toEqual({name: "phone xyz"});
         });
     });
 });
