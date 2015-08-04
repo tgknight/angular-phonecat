@@ -3,7 +3,17 @@
 /* jasmine specs for controllers go here */
 describe('PhoneCat controllers', function() {
 
+    beforeEach(function() {
+        this.addMatchers({
+            // toEqualData interests only the object properties, ignoring all attached methods
+            toEqualData: function(expected) {
+                return angular.equals(this.actual, expected);
+            }
+        });
+    });
+
     beforeEach(module('phonecatApp'));
+    beforeEach(module('phonecatServices'));
 
     describe('PhoneListCtrl', function() {
         var $scope, $httpBackend;
@@ -26,13 +36,16 @@ describe('PhoneCat controllers', function() {
 
         it('should create "phones" model with 2 phones fetched from xhr', function() {
             // not fetched yet, thus it should be undefined object
-            expect($scope.phones).toBeUndefined();
+            // expect($scope.phones).toBeUndefined();
+
+            // not fetched yet, this it should be an empty array of phones
+            expect($scope.phones).toEqualData([]);
 
             // flush the request, and return $http promise
             $httpBackend.flush();
 
             // expect to equal trained response
-            expect($scope.phones).toEqual([{name: "Nexus S"}, {name: "Motorola DRIOD"}]);
+            expect($scope.phones).toEqualData([{name: "Nexus S"}, {name: "Motorola DRIOD"}]);
         });
     });
 
@@ -52,10 +65,13 @@ describe('PhoneCat controllers', function() {
         }));
 
         it('should fetch phone xyz detail', function() {
-            expect($scope.phone).toBeUndefined();
+            // expect($scope.phone).toBeUndefined();
+
+            // not fetched yet, thus it shold be an empty object of a phone
+            expect($scope.phone).toEqualData({});
             $httpBackend.flush();
 
-            expect($scope.phone).toEqual(expectRespond);
+            expect($scope.phone).toEqualData(expectRespond);
         });
     });
 });
